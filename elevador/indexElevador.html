@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elevador</title>
+    <img src="imagenes/cielo.gif" id="cielo" class="img">
+    <h1>JUEGO ELEVADOR</h1>
+
+    <link rel="stylesheet" type="text/css" href="styleElevador.css">
+    <div class="btns">
+        <button onclick="comparar1()" class="btn" id="suben" disabled>SUBIR NAKAMA</button><br>
+        <button onclick="comparar2()" class="btn" id="bajan" disabled>BAJAR NAKAMA</button>
+        <button onclick="arriba()" class="btn" id="arriba" disabled>SUBIR PISO</button>
+        <button onclick="abajo()" class="btn" id="abajo" disabled>BAJAR PISO</button>
+    </div>
+
+    <div id="merry6">
+        <img src="imagenes/zona.png" alt="" class="merry" id="m6">
+        <img src="imagenes/zona.png" alt="" class="personaje" id="p6">
+    </div>
+    <div id="merry5">
+        <img src="imagenes/zona.png" alt="" class="merry" id="m5">
+        <img src="imagenes/zona.png" alt="" class="personaje" id="p5">
+    </div>
+    <div id="merry4">
+        <img src="imagenes/zona.png" alt="" class="merry" id="m4">
+        <img src="imagenes/zona.png" alt="" class="personaje" id="p4">
+    </div>
+    <div id="merry3">
+        <img src="imagenes/zona.png" alt="" class="merry" id="m3">
+        <img src="imagenes/zona.png" alt="" class="personaje" id="p3">
+    </div>
+    <div id="merry2">
+        <img src="imagenes/zona.png" alt="" class="merry" id="m2">
+        <img src="imagenes/zona.png" alt="" class="personaje" id="p2">
+    </div>
+    <div id="merry1">
+        <img src="imagenes/zona.png" alt="" class="merry" id="m1">
+        <img src="imagenes/zona.png" alt="" class="personaje" id="p1">
+    </div>
+    <div id="merry0"><img src="imagenes/zona.png" alt="" class="merry" id="m0"></div>
+    <div id="isla"><img src="imagenes/isla.png" alt="" class="isla" id="m0"></div>
+
+    <div class="iniciar"><input onclick="iniciarJuego()" type="button" class="btnIniciar" id="btnIniciar" value="START"></div>
+
+    <div class="puntaje">
+        <input type="text" id="puntos" value="0" class="puntos" readonly>
+    </div>
+    <h2 class="instrucciones">Despues de presionar "START" <br>presiona la tecla "SUBIR PISO"</h2>
+    <h2 class="instrucciones2">Los nakama solo pueden bajar <br>a un lado de la isla</h2>
+
+</head>
+
+<body>
+    <script>
+        var elevador = new Array(5);
+        var contadorPisos = 0;
+        var pisoAnterior;
+        var numeroAleatorio;
+        var subir = document.getElementById('arriba');
+        var desender = document.getElementById('abajo');
+        var subirBarco = document.getElementById('suben');
+        var bajanBarco = document.getElementById('bajan');
+        var btnIniciar = document.getElementById('btnIniciar');
+        var puntos = 0;
+        var fin =0;
+
+        //funciones para iniciar el juego 
+        function iniciarJuego() {
+            activarBtnMovimiento();
+            numeroRandom();
+            ponerLuffy(); 
+        }
+        function activarBtnMovimiento() {
+            subir.disabled = false;
+            desender.disabled = false;
+            subirBarco.disabled = false;
+            bajanBarco.disabled = false;
+            btnIniciar.disabled = true;
+
+        }
+        function numeroRandom() {
+            let numero = Math.floor(Math.random() * 6) + 1;
+            numeroAleatorio = numero;
+        }
+        function ponerLuffy() {
+            let v1 = document.getElementById("p" + numeroAleatorio).src = "imagenes/luffy.gif";
+        }
+
+        //funcion para el marcador del juego 
+        function puntaje() {
+            let puntos = document.getElementById("puntos").value;
+            puntos = parseInt(puntos) + 1;
+            document.getElementById("puntos").value = puntos;
+            puntos = puntos;
+            fin = puntos;
+            //alerta para finalizar
+            if(fin == 10){
+                alert("GANASTE");
+            }
+        }
+
+        //funciones para comparar el onclick del boton SUBIR NAKAMA
+        function comparar1() {
+            if ((numeroAleatorio == contadorPisos) && (contadorPisos >= 1)) {
+                agregar();
+                quitarimgLuffy();
+            }
+        }
+        function agregar() {
+            if (elevador.length == 10) {
+                alert("EL ELEVADOR ESTA LLENO ");
+            } else {
+                elevador.push(1);
+                console.log(elevador);
+            }
+        }
+        function quitarimgLuffy(){
+            let v1 = document.getElementById("p" + numeroAleatorio).src = "imagenes/zona.png";
+            //las llamas en iniciarJuego (con esto se crea el bucle)
+            numeroRandom();
+            ponerLuffy();
+        }
+
+        //funciones para comparar el onclick del boton BAJAR NAKAMA
+        function comparar2(){
+            if(contadorPisos<=1){
+                bajar();
+            }
+        }
+        function bajar() {
+            if (elevador.length == 5) {
+                alert("EL ELEVADOR ESTA VACIO");
+            } else {
+                elevador.pop();
+                console.log(elevador);
+                puntaje();
+            }
+        }
+
+        //FUNCIONES PARA DELIMITAR AL BARCO EN LA PANTALLA
+        function arriba() {
+            contadorPisos = contadorPisos + 1;
+            quitarImgPisoAbajo();
+            if (contadorPisos == 7) {
+                alert("YA NO HAY MAS PISOS");
+                console.log(contadorPisos);
+                let merry = document.getElementById("m6").src = "imagenes/merry.gif";
+            } else {
+                let merry = document.getElementById("m" + contadorPisos).src = "imagenes/merry.gif";
+
+            }
+        }
+        function abajo() {
+            contadorPisos = contadorPisos - 1;
+            quitarImgPisoArriba()
+            if (contadorPisos ==0) {
+                alert("TE ENCUENTRAS EN LA PLANTA BAJA");
+                let merry = document.getElementById("m1").src = "imagenes/merry.gif";
+            } else {
+                let merry = document.getElementById("m" + contadorPisos).src = "imagenes/merry.gif";
+            }
+        }
+                                        
+        //FUNCION PARA QUITAR LA IMAGEN DEL PISO DE ABAJO Y SOLO SE VEA LA IMAGEN DONDE SE ENCUENTRA EL BARCO 
+        function quitarImgPisoAbajo() {
+            if (contadorPisos < 7) {
+                pisoAnterior = contadorPisos - 1;
+                let merry = document.getElementById("m" + pisoAnterior).src = "imagenes/zona.png";
+            } else { }
+        }
+
+        //FUNCION PARA QUITAR LA IMAGEN DEL PISO DE ARRIBA Y SOLO SE VEA LA IMAGEN DONDE SE ENCUENTRA EL BARCO
+        function quitarImgPisoArriba() {
+            pisoAnterior = contadorPisos + 1;
+            let merry = document.getElementById("m" + pisoAnterior).src ="imagenes/zona.png";
+        }
+    </script>
+
+</body>
+
+</html>
